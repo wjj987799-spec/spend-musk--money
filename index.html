@@ -57,14 +57,26 @@
     .my-orders-btn:hover { background: #e5e5ea; transform: translateY(-1px); }
     .orders-badge { background: var(--text-main); color: white; border-radius: 10px; padding: 0 6px; font-size: 11px; }
 
-    .title {
+    /* 全新醒目的双语标题 */
+    .main-title {
+      font-size: 38px;
+      font-weight: 900;
+      color: var(--text-main);
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+      margin-top: 10px;
+      background: linear-gradient(90deg, #1d1d1f, #434345);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .sub-title {
       font-size: 12px; letter-spacing: 4px; color: var(--text-muted);
-      text-transform: uppercase; font-weight: 600; margin-bottom: 12px;
+      text-transform: uppercase; font-weight: 600; margin-bottom: 16px;
     }
 
     .money-count {
-      font-size: 46px; font-weight: 700; color: var(--text-main);
-      margin: 10px 0 20px; font-variant-numeric: tabular-nums; letter-spacing: -1.5px;
+      font-size: 52px; font-weight: 800; color: var(--text-main);
+      margin: 10px 0 24px; font-variant-numeric: tabular-nums; letter-spacing: -2px;
     }
 
     .progress-bar-container {
@@ -80,7 +92,7 @@
 
     /* 分类标题 */
     .category-title {
-      font-size: 22px; font-weight: 700; color: var(--text-main);
+      font-size: 24px; font-weight: 800; color: var(--text-main);
       margin: 60px 0 24px 4px; letter-spacing: -0.5px;
       border-bottom: 2px solid #e5e5ea; padding-bottom: 12px;
     }
@@ -107,14 +119,10 @@
       background: #e5e5ea; position: relative;
     }
     
-    /* 图片加载骨架屏效果 */
     .product-img-wrapper::before {
-      content: '';
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
       background: linear-gradient(90deg, #e5e5ea 25%, #f4f5f7 50%, #e5e5ea 75%);
-      background-size: 400% 100%;
-      animation: skeleton-loading 1.5s infinite;
-      z-index: 1;
+      background-size: 400% 100%; animation: skeleton-loading 1.5s infinite; z-index: 1;
     }
     @keyframes skeleton-loading { 0% { background-position: 100% 50%; } 100% { background-position: 0 50%; } }
     
@@ -225,7 +233,8 @@
     @media (max-width: 600px) { 
       body { padding: 20px 16px 100px; } 
       .header-bank { padding: 40px 20px 20px; } 
-      .money-count { font-size: 32px; } 
+      .main-title { font-size: 30px; }
+      .money-count { font-size: 38px; } 
       .my-orders-btn { top: 12px; right: 12px; padding: 6px 12px; font-size: 12px; }
     }
   </style>
@@ -237,7 +246,8 @@
       <button class="my-orders-btn" onclick="openOrdersModal()">
         我的订单 <span class="orders-badge" id="ordersTotalBadge">0</span>
       </button>
-      <div class="title">帮马斯克花钱 · ELON MUSK WEALTH SIMULATOR</div>
+      <div class="main-title">帮马斯克花钱</div>
+      <div class="sub-title">ELON MUSK WEALTH SIMULATOR</div>
       <div class="money-count" id="moneyCount">$ 310,000,000,000</div>
       <div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
       <div class="percent-container">已消耗资产: <span id="percentText">0.000000</span>%</div>
@@ -293,69 +303,73 @@
     let targetMoney = MUSK_TOTAL;
     let ordersHistory = []; 
     
-    // 🔥 全新优化的图床链接，修复加载失败，确保100%图文匹配
+    // 🔥 全面扩充的大型商品库，分类细化，包含苹果17、牛排、顶级酒店与理查德米勒
     const productCategories = [
+      {
+        category: "日常与黑科技盲盒 (Daily & Tech)",
+        items: [
+          { id: 1, name: '一杯星巴克咖啡', price: 5, img: 'https://images.unsplash.com/photo-1551030173-122aabc4489c?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 2, name: '苹果 iPhone 17 Pro Max (2TB)', price: 1999, img: 'https://images.unsplash.com/photo-1603792907191-89e55f70099a?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 3, name: 'Apple Vision Pro', price: 3499, img: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 4, name: '英伟达 RTX 5090 Ti 显卡', price: 3999, img: 'https://images.unsplash.com/photo-1591488320449-011701bb6704?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 5, name: '波士顿动力机器狗 Spot', price: 74500, img: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 6, name: '脑机接口 Neuralink 植入', price: 150000, img: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=800&q=90', count: 0 }
+        ]
+      },
+      {
+        category: "极致生活与味蕾体验 (Ultimate Lifestyle)",
+        items: [
+          { id: 7, name: '顶级A5和牛战斧牛排晚宴', price: 2500, img: 'https://images.unsplash.com/photo-1544025162-8315ea0705a6?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 8, name: '罗曼尼·康帝特级园红酒 (瓶)', price: 25000, img: 'https://images.unsplash.com/photo-1584916201218-f4242ceb4809?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 9, name: '迪拜帆船酒店皇家套房 (一晚)', price: 28000, img: 'https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 10, name: '维珍银河太空旅行船票', price: 450000, img: 'https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 11, name: '包下马尔代夫私人岛屿 (一周)', price: 1500000, img: 'https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?auto=format&fit=crop&w=800&q=90', count: 0 }
+        ]
+      },
+      {
+        category: "顶级腕表收藏 (Haute Horlogerie)",
+        items: [
+          { id: 12, name: '劳力士 保罗·纽曼 迪通拿', price: 17000000, img: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 13, name: '理查德米勒 RM56 蓝宝石陀飞轮', price: 2000000, img: 'https://images.unsplash.com/photo-1622434641406-a158123450f9?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 14, name: '捷克豹 亿万富翁钻石腕表', price: 18000000, img: 'https://images.unsplash.com/photo-1594534475808-b18fc33b045e?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 15, name: '百达翡丽 大师弦音复杂腕表', price: 31000000, img: 'https://images.unsplash.com/photo-1524592094714-0f0654e20314?auto=format&fit=crop&w=800&q=90', count: 0 }
+        ]
+      },
       {
         category: "顶级超跑与私人车库 (Hypercars)",
         items: [
-          // 兰博基尼 Revuelto 替代图 (准确的兰博基尼超跑)
-          { id: 21, name: '兰博基尼 Revuelto (全新混动)', price: 608000, img: 'https://images.unsplash.com/photo-1566473965997-3de9c817e938?auto=format&fit=crop&w=800&q=90', count: 0 },
-          // 法拉利 12Cilindri 替代图 (准确的红色法拉利)
-          { id: 22, name: '法拉利 12Cilindri (V12旗舰)', price: 500000, img: 'https://images.unsplash.com/photo-1592198084033-aade902d1aae?auto=format&fit=crop&w=800&q=90', count: 0 },
-          // 布加迪  (黑蓝布加迪Chiron)
-          { id: 23, name: '布加迪 Tourbillon (百年V16)', price: 4100000, img: 'https://images.unsplash.com/photo-1608848461950-0fe51dfc41cb?auto=format&fit=crop&w=800&q=90', count: 0 },
-          // 柯尼塞格 
-          { id: 24, name: '柯尼塞格 Jesko', price: 3000000, img: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800&q=90', count: 0 }
+          { id: 16, name: '特斯拉 Cyberbeast', price: 100000, img: 'https://images.unsplash.com/photo-1560958089-b8a1929cea89?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 17, name: '兰博基尼 Revuelto', price: 608000, img: 'https://images.unsplash.com/photo-1566473965997-3de9c817e938?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 18, name: '柯尼塞格 Jesko', price: 3000000, img: 'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 19, name: '布加迪 Tourbillon (百年V16)', price: 4100000, img: 'https://images.unsplash.com/photo-1608848461950-0fe51dfc41cb?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 20, name: '劳斯莱斯 浮影 (Boat Tail)', price: 28000000, img: 'https://images.unsplash.com/photo-1631269389270-e18e6ce904b7?auto=format&fit=crop&w=800&q=90', count: 0 }
+        ]
+      },
+      {
+        category: "豪宅与私人领地 (Estates & Jets)",
+        items: [
+          { id: 21, name: '比佛利山庄顶级豪宅', price: 85000000, img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 22, name: '私人波音 747 定制客机', price: 400000000, img: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 23, name: '达芬奇名画《救世主》', price: 450000000, img: 'https://images.unsplash.com/photo-1578301978018-3005759f48f7?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 24, name: '摩纳哥豪华超级游艇', price: 750000000, img: 'https://images.unsplash.com/photo-1567899378494-47b22a2ae96a?auto=format&fit=crop&w=800&q=90', count: 0 }
         ]
       },
       {
         category: "硬通货与战略储备 (Assets & Gold)",
         items: [
-          // 金砖准确图
-          { id: 25, name: '1吨 99.99% 纯金砖', price: 75000000, img: 'https://images.unsplash.com/photo-1610375461246-83ff852e21eb?auto=format&fit=crop&w=800&q=90', count: 0 },
-          // 银锭/白银概念图
-          { id: 26, name: '10吨 工业级纯银锭', price: 10000000, img: 'https://images.unsplash.com/photo-1611024847487-e26090c2a5db?auto=format&fit=crop&w=800&q=90', count: 0 },
-          // 比特币实体硬币图
+          { id: 25, name: '10吨 工业级纯银锭', price: 10000000, img: 'https://images.unsplash.com/photo-1611024847487-e26090c2a5db?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 26, name: '1吨 99.99% 纯金砖', price: 75000000, img: 'https://images.unsplash.com/photo-1610375461246-83ff852e21eb?auto=format&fit=crop&w=800&q=90', count: 0 },
           { id: 27, name: '1万枚 纯正比特币', price: 650000000, img: 'https://images.unsplash.com/photo-1518546305927-5a555bb7020d?auto=format&fit=crop&w=800&q=90', count: 0 }
-        ]
-      },
-      {
-        category: "日常与科技盲盒 (Daily & Tech)",
-        items: [
-          // 星巴克杯子图
-          { id: 1, name: '一杯星巴克咖啡', price: 5, img: 'https://images.unsplash.com/photo-1551030173-122aabc4489c?auto=format&fit=crop&w=800&q=90', count: 0 },
-          // VR头显图 (替代Vision Pro)
-          { id: 2, name: 'Apple Vision Pro', price: 3499, img: 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=800&q=90', count: 0 },
-          // 脑机芯片/线路概念图
-          { id: 4, name: '脑机接口 Neuralink', price: 150000, img: 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=800&q=90', count: 0 },
-          // 机器狗准确图
-          { id: 5, name: '波士顿动力机器狗', price: 74500, img: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=800&q=90', count: 0 }
-        ]
-      },
-      {
-        category: "奢侈品与生活方式 (Luxury)",
-        items: [
-          // 奢华手表图 (替代劳力士保罗纽曼)
-          { id: 6, name: '劳力士保罗纽曼迪通拿', price: 17000000, img: 'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=800&q=90', count: 0 },
-          // 比佛利山庄豪宅航拍图
-          { id: 7, name: '比佛利山庄顶级豪宅', price: 85000000, img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=800&q=90', count: 0 },
-          // 私人飞机内部图
-          { id: 8, name: '私人波音 747 定制客机', price: 400000000, img: 'https://images.unsplash.com/photo-1540962351504-03099e0a754b?auto=format&fit=crop&w=800&q=90', count: 0 },
-          // 达芬奇风格古典油画图
-          { id: 9, name: '达芬奇名画《救世主》', price: 450000000, img: 'https://images.unsplash.com/photo-1578301978018-3005759f48f7?auto=format&fit=crop&w=800&q=90', count: 0 }
         ]
       },
       {
         category: "巨头收购与人类未来 (Acquisition & Future)",
         items: [
-          // X/Twitter 手机应用图
-          { id: 13, name: '全面私有化 X (Twitter)', price: 44000000000, img: 'https://images.unsplash.com/photo-1611605698335-8b1569810432?auto=format&fit=crop&w=800&q=90', count: 0 },
-          // 可口可乐瓶子高清图
-          { id: 14, name: '买下可口可乐公司', price: 280000000000, img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=800&q=90', count: 0 },
-          // 火箭发射图
-          { id: 16, name: 'SpaceX 星舰单次发射', price: 90000000, img: 'https://images.unsplash.com/photo-1517976487492-5750f3195933?auto=format&fit=crop&w=800&q=90', count: 0 },
-          // 火星地表概念图
-          { id: 20, name: '火星首座独立生态城市', price: 120000000000, img: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&w=800&q=90', count: 0 }
+          { id: 28, name: 'SpaceX 星舰单次发射', price: 90000000, img: 'https://images.unsplash.com/photo-1517976487492-5750f3195933?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 29, name: '投资解决全球饥饿问题', price: 6000000000, img: 'https://images.unsplash.com/photo-1464226184884-fa280b87c399?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 30, name: '全面私有化 X (Twitter)', price: 44000000000, img: 'https://images.unsplash.com/photo-1611605698335-8b1569810432?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 31, name: '火星首座独立生态城市', price: 120000000000, img: 'https://images.unsplash.com/photo-1614730321146-b6fa6a46bcb4?auto=format&fit=crop&w=800&q=90', count: 0 },
+          { id: 32, name: '买下整个可口可乐公司', price: 280000000000, img: 'https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=800&q=90', count: 0 }
         ]
       }
     ];
