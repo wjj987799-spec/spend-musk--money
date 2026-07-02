@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ELON MUSK WEALTH SIMULATOR</title>
+  <style>
+    /* 极致白·奢华极简主义风格 */
+    :root {
+      --bg-color: #f8f9fa;
+      --card-bg: #ffffff;
+      --text-main: #111111;
+      --text-muted: #666666;
+      --accent-gold: #b8975a; /* 奢华香槟金 */
+      --accent-green: #0d7a5f; /* 沉稳翡翠绿 */
+      --border-color: rgba(0, 0, 0, 0.06);
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.02);
+      --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.04);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 640px;
+    }
+
+    /* 顶部黑金/白金奢华仪表盘 */
+    .header-bank {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 40px 30px;
+      text-align: center;
+      box-shadow: var(--shadow-lg);
+      margin-bottom: 30px;
+      position: sticky;
+      top: 20px;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.95);
+    }
+
+    .title {
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .money-count {
+      font-size: 42px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin: 15px 0;
+      font-variant-numeric: tabular-nums; /* 让数字等宽对齐，滚动时不会左右晃动 */
+      letter-spacing: -1px;
+    }
+
+    .percent-container {
+      display: inline-block;
+      background: #f1f3f5;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--accent-green);
+      font-weight: 500;
+    }
+
+    .percent-container span {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* 商品列表 */
+    .product-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* 商品卡片：艺术品般的陈列感 */
+    .product-card {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--card-bg);
+      border-radius: 14px;
+      padding: 24px;
+      border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.04);
+      border-color: rgba(184, 151, 90, 0.3); /* 悬浮时边框呈现微弱香槟金 */
+    }
+
+    .product-info {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .product-name {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text-main);
+      letter-spacing: -0.2px;
+    }
+
+    .product-price {
+      font-size: 14px;
+      color: var(--accent-gold);
+      font-weight: 500;
+    }
+
+    /* 现代极简控制按钮 */
+    .control-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn {
+      width: 38px;
+      height: 38px;
+      background: #f1f3f5;
+      color: var(--text-main);
+      border: none;
+      border-radius: 50%;
+      font-size: 18px;
+      font-weight: 400;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.2s;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: var(--text-main);
+      color: #ffffff;
+    }
+
+    .btn:active:not(:disabled) {
+      transform: scale(0.92);
+    }
+
+    .btn:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+    }
+
+    .count-num {
+      font-size: 16px;
+      min-width: 24px;
+      text-align: center;
+      font-weight: 600;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* 适配手机端浏览体验 */
+    @media (max-width: 480px) {
+      body { padding: 20px 12px; }
+      .money-count { font-size: 32px; }
+      .product-card { padding: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header-bank">
+      <div class="title">Elon Musk NET WORTH SIMULATOR</div>
+      <div class="money-count" id="moneyCount">$ 310,000,000,000</div>
+      <div class="percent-container">
+        已消耗资产: <span id="percentText">0.000000</span>%
+      </div>
+    </div>
+
+    <div class="product-grid" id="productGrid"></div>
+  </div>
+
+  <script>
+    const MUSK_TOTAL = 310000000000;
+    let currentMoney = MUSK_TOTAL; // 动画显示的当前金额
+    let targetMoney = MUSK_TOTAL;  // 实际结算的目标金额
+    
+    // 带有科技感与奢华感的顶级商品库
+    let products = [
+      { id: 1, name: '脑机接口 Neuralink 芯片植入', price: 150000, count: 0 },
+      { id: 2, name: 'Tesla Cyberbeast 赛博皮卡顶配', price: 100000, count: 0 },
+      { id: 3, name: 'SpaceX 星舰 (Starship) 单次发射', price: 90000000, count: 0 },
+      { id: 4, name: '定制版私人核能破冰船', price: 1200000000, count: 0 },
+      { id: 5, name: '收购曼联足球俱乐部 (Man United)', price: 4500000000, count: 0 },
+      { id: 6, name: '全面私有化 X (原 Twitter)', price: 44000000000, count: 0 },
+      { id: 7, name: '火星首座独立生态圈微型城市', price: 120000000000, count: 0 }
+    ];
+
+    const moneyCountEl = document.getElementById('moneyCount');
+    const percentTextEl = document.getElementById('percentText');
+    const productGridEl = document.getElementById('productGrid');
+
+    // 渲染商品列表
+    function render() {
+      productGridEl.innerHTML = '';
+      products.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        card.innerHTML = `
+          <div class="product-info">
+            <span class="product-name">${item.name}</span>
+            <span class="product-price">$ ${item.price.toLocaleString('en-US')}</span>
+          </div>
+          <div class="control-box">
+            <button class="btn" onclick="changeCount(${item.id}, 'sub')" ${item.count <= 0 ? 'disabled' : ''}>−</button>
+            <span class="count-num">${item.count}</span>
+            <button class="btn" onclick="changeCount(${item.id}, 'add')">+</button>
+          </div>
+        `;
+        productGridEl.appendChild(card);
+      });
+    }
+
+    // 处理加减点击
+    window.changeCount = function(id, type) {
+      let product = products.find(p => p.id === id);
+      if (type === 'add') {
+        product.count++;
+      } else if (type === 'sub' && product.count > 0) {
+        product.count--;
+      }
+      
+      // 重新计算目标金额（给动画系统做准备）
+      let totalSpent = products.reduce((sum, p) => sum + (p.price * p.count), 0);
+      targetMoney = Math.max(0, MUSK_TOTAL - totalSpent);
+      
+      // 实时更新百分比
+      let spentPercent = ((totalSpent / MUSK_TOTAL) * 100).toFixed(6);
+      percentTextEl.innerText = spentPercent;
+
+      render();
+    }
+
+    // 🌟 丝滑数字滚动动画 (Lerp 缓动算法)
+    function animateMoney() {
+      // 只有当当前显示的数字与目标数字差距较大时，才触发动画
+      if (Math.abs(currentMoney - targetMoney) > 0.1) {
+        // 每帧向目标值靠近 15%，实现优雅的淡入淡出式减速滚动
+        currentMoney += (targetMoney - currentMoney) * 0.15;
+        
+        // 临近时直接对齐，防止无限小数微动
+        if (Math.abs(currentMoney - targetMoney) < 1) currentMoney = targetMoney;
+        
+        // 更新 DOM
+        moneyCountEl.innerText = `$ ${Math.floor(currentMoney).toLocaleString('en-US')}`;
+      }
+      // 依靠浏览器最优帧率循环请求
+      requestAnimationFrame(animateMoney);
+    }
+
+    // 初始化执行
+    render();
+    animateMoney(); // 启动缓动动画系统
+  </script>
+</body>
+</html>
