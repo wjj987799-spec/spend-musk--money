@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ELON MUSK WEALTH SIMULATOR - PREMIUM EDITION</title>
   <style>
     /* 极致白·奢华极简主义风格 */
@@ -11,8 +11,8 @@
       --card-bg: #ffffff;
       --text-main: #1d1d1f;
       --text-muted: #86868b;
-      --accent-gold: #c3a343; /* 更加克制的香槟金 */
-      --accent-blue: #0066cc; /* Apple 风格的科技蓝 */
+      --accent-gold: #c3a343;
+      --accent-blue: #0066cc;
       --border-color: rgba(0, 0, 0, 0.05);
       --shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.02);
       --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.04);
@@ -21,260 +21,217 @@
       --radius-md: 14px;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
       background-color: var(--bg-color);
       color: var(--text-main);
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       -webkit-font-smoothing: antialiased;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 40px 20px 80px;
-      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 40px 20px 100px; min-height: 100vh;
     }
 
-    .container {
-      width: 100%;
-      max-width: 680px;
-    }
+    .container { width: 100%; max-width: 680px; }
 
-    /* 顶部仪表盘：毛玻璃悬浮效果 */
+    /* 顶部仪表盘 */
     .header-bank {
       background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
       border: 1px solid rgba(255, 255, 255, 0.5);
-      border-radius: var(--radius-lg);
-      padding: 40px 30px;
-      text-align: center;
-      box-shadow: var(--shadow-md);
-      margin-bottom: 40px;
-      position: sticky;
-      top: 20px;
-      z-index: 100;
-      transition: all 0.3s ease;
+      border-radius: var(--radius-lg); padding: 40px 30px;
+      text-align: center; box-shadow: var(--shadow-md);
+      margin-bottom: 40px; position: sticky; top: 20px; z-index: 100;
     }
 
     .title {
-      font-size: 12px;
-      letter-spacing: 4px;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      font-weight: 600;
-      margin-bottom: 12px;
+      font-size: 12px; letter-spacing: 4px; color: var(--text-muted);
+      text-transform: uppercase; font-weight: 600; margin-bottom: 12px;
     }
 
     .money-count {
-      font-size: 46px;
-      font-weight: 700;
-      color: var(--text-main);
-      margin: 10px 0 20px;
-      font-variant-numeric: tabular-nums;
-      letter-spacing: -1.5px;
+      font-size: 46px; font-weight: 700; color: var(--text-main);
+      margin: 10px 0 20px; font-variant-numeric: tabular-nums; letter-spacing: -1.5px;
     }
 
     .progress-bar-container {
-      width: 100%;
-      height: 6px;
-      background-color: #e5e5ea;
-      border-radius: 3px;
-      margin-bottom: 12px;
-      overflow: hidden;
+      width: 100%; height: 6px; background-color: #e5e5ea;
+      border-radius: 3px; margin-bottom: 12px; overflow: hidden;
     }
-
     .progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, var(--accent-blue), #3399ff);
-      width: 0%;
-      transition: width 0.3s ease;
+      height: 100%; background: linear-gradient(90deg, var(--accent-blue), #3399ff);
+      width: 0%; transition: width 0.3s ease;
     }
+    .percent-container { font-size: 13px; color: var(--text-muted); font-weight: 500; }
+    .percent-container span { color: var(--accent-blue); font-weight: 600; }
 
-    .percent-container {
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
-    .percent-container span {
-      font-variant-numeric: tabular-nums;
-      color: var(--accent-blue);
-      font-weight: 600;
-    }
-
-    /* 分类标题 */
+    /* 分类与商品列表 */
     .category-title {
-      font-size: 18px;
-      font-weight: 600;
-      color: var(--text-main);
-      margin: 40px 0 16px 10px;
-      letter-spacing: -0.5px;
+      font-size: 18px; font-weight: 600; color: var(--text-main);
+      margin: 40px 0 16px 10px; letter-spacing: -0.5px;
     }
-
-    /* 商品列表 */
-    .product-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 16px;
-    }
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
 
     /* 商品卡片 */
     .product-card {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: var(--card-bg);
-      border-radius: var(--radius-md);
-      padding: 24px;
-      border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-sm);
+      display: flex; flex-direction: column; justify-content: space-between;
+      background: var(--card-bg); border-radius: var(--radius-md); padding: 24px;
+      border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);
       transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     }
-    
-    .product-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-hover);
-      border-color: rgba(0, 102, 204, 0.1);
-    }
+    .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); border-color: rgba(0, 102, 204, 0.1); }
+    .product-header { margin-bottom: 20px; }
+    .product-name { font-size: 17px; font-weight: 600; margin-bottom: 8px; line-height: 1.3; }
+    .product-price { font-size: 15px; color: var(--accent-gold); font-weight: 600; }
 
-    .product-header {
-      margin-bottom: 20px;
-    }
-
-    .product-name {
-      font-size: 17px;
-      font-weight: 600;
-      color: var(--text-main);
-      margin-bottom: 8px;
-      line-height: 1.3;
-    }
-
-    .product-price {
-      font-size: 15px;
-      color: var(--accent-gold);
-      font-weight: 600;
-    }
-
-    /* 购买控制区 */
+    /* 控制器 */
     .control-box {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #f5f5f7;
-      border-radius: 40px;
-      padding: 6px;
+      display: flex; align-items: center; justify-content: space-between;
+      background: #f5f5f7; border-radius: 40px; padding: 6px;
     }
-
     .btn {
-      width: 36px;
-      height: 36px;
-      background: #ffffff;
-      color: var(--text-main);
-      border: 1px solid rgba(0,0,0,0.05);
-      border-radius: 50%;
-      font-size: 20px;
-      font-weight: 300;
-      cursor: pointer;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      width: 36px; height: 36px; background: #ffffff; color: var(--text-main);
+      border: 1px solid rgba(0,0,0,0.05); border-radius: 50%; font-size: 20px;
+      cursor: pointer; display: flex; justify-content: center; align-items: center;
+      transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+    .btn:hover:not(:disabled) { background: var(--text-main); color: #ffffff; }
+    .btn:active:not(:disabled) { transform: scale(0.9); }
+    .btn:disabled { opacity: 0.3; cursor: not-allowed; background: transparent; border: none; box-shadow: none; }
+    .count-num { font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; width: 40px; text-align: center; }
+    
+    /* 底部去结算按钮 */
+    .checkout-btn {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background: var(--text-main); color: #ffffff; padding: 16px 36px;
+      border-radius: 30px; font-size: 16px; font-weight: 600; border: none;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15); cursor: pointer; z-index: 90;
+      transition: all 0.3s; display: none;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .checkout-btn:hover { transform: translateX(-50%) translateY(-2px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+    .checkout-badge { background: var(--accent-blue); color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; }
+
+    /* 结账弹窗 Modal */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      display: flex; justify-content: center; align-items: flex-end;
+      z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content {
+      background: #fff; width: 100%; max-width: 600px;
+      border-radius: 24px 24px 0 0; padding: 30px;
+      transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 85vh; overflow-y: auto;
+    }
+    .modal-overlay.active .modal-content { transform: translateY(0); }
+    
+    .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+    .modal-header h2 { font-size: 22px; font-weight: 700; }
+    .close-btn { background: #f5f5f7; border: none; width: 32px; height: 32px; border-radius: 50%; font-size: 18px; cursor: pointer; color: var(--text-muted); }
+    .close-btn:hover { background: #e5e5ea; color: var(--text-main); }
+
+    /* 订单清单 */
+    .order-summary { background: #fbfbfd; border-radius: 12px; padding: 16px; margin-bottom: 24px; border: 1px solid var(--border-color); }
+    .order-item { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; color: var(--text-muted); }
+    .order-item:last-child { margin-bottom: 0; padding-top: 12px; margin-top: 12px; border-top: 1px solid var(--border-color); font-weight: 600; color: var(--text-main); font-size: 16px; }
+    
+    /* 表单输入 */
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; }
+    .form-group input, .form-group textarea {
+      width: 100%; padding: 14px 16px; border-radius: 12px; border: 1px solid #d2d2d7;
+      background: #ffffff; font-size: 15px; font-family: inherit; transition: all 0.2s; outline: none;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--accent-blue); box-shadow: 0 0 0 4px rgba(0, 102, 204, 0.1); }
+    .form-group textarea { resize: none; }
+
+    .submit-btn {
+      width: 100%; background: var(--accent-blue); color: #fff; border: none; padding: 16px;
+      border-radius: 14px; font-size: 17px; font-weight: 600; cursor: pointer; margin-top: 10px;
       transition: all 0.2s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
     }
+    .submit-btn:hover { background: #005bb5; }
+    .submit-btn:active { transform: scale(0.98); }
 
-    .btn:hover:not(:disabled) {
-      background: var(--text-main);
-      color: #ffffff;
+    /* 成功提示 Toast */
+    .toast {
+      position: fixed; top: 40px; left: 50%; transform: translateX(-50%) translateY(-20px);
+      background: rgba(29, 29, 31, 0.9); backdrop-filter: blur(10px); color: white;
+      padding: 16px 24px; border-radius: 30px; font-size: 15px; font-weight: 500;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2); z-index: 2000;
+      opacity: 0; visibility: hidden; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      display: flex; align-items: center; gap: 8px; white-space: nowrap;
     }
+    .toast.show { opacity: 1; visibility: visible; transform: translateX(-50%) translateY(0); }
 
-    .btn:active:not(:disabled) {
-      transform: scale(0.9);
+    @media (min-width: 600px) {
+      .modal-overlay { align-items: center; }
+      .modal-content { border-radius: 24px; transform: scale(0.95) translateY(20px); }
+      .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
     }
-
-    .btn:disabled {
-      opacity: 0.3;
-      cursor: not-allowed;
-      background: transparent;
-      border: none;
-      box-shadow: none;
-    }
-
-    .count-num {
-      font-size: 16px;
-      font-weight: 600;
-      font-variant-numeric: tabular-nums;
-      width: 40px;
-      text-align: center;
-    }
-    
-    /* 底部结算按钮 */
-    .receipt-btn {
-      position: fixed;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--text-main);
-      color: #ffffff;
-      padding: 16px 32px;
-      border-radius: 30px;
-      font-size: 16px;
-      font-weight: 600;
-      border: none;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-      cursor: pointer;
-      z-index: 101;
-      transition: all 0.3s;
-      display: none; /* 默认隐藏 */
-    }
-    
-    .receipt-btn:hover {
-      transform: translateX(-50%) translateY(-2px);
-      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-    }
-
-    /* 适配移动端 */
-    @media (max-width: 600px) {
-      body { padding: 20px 16px 80px; }
-      .money-count { font-size: 36px; }
-      .product-grid { grid-template-columns: 1fr; }
-      .header-bank { padding: 30px 20px; }
-    }
+    @media (max-width: 600px) { body { padding: 20px 16px 100px; } .header-bank { padding: 30px 20px; } .money-count { font-size: 36px; } }
   </style>
 </head>
 <body>
 
   <div class="container">
-    <!-- 奢华白金仪表盘 -->
     <div class="header-bank">
       <div class="title">Elon Musk NET WORTH SIMULATOR</div>
       <div class="money-count" id="moneyCount">$ 310,000,000,000</div>
-      <div class="progress-bar-container">
-        <div class="progress-bar" id="progressBar"></div>
-      </div>
-      <div class="percent-container">
-        已消耗资产: <span id="percentText">0.000000</span>%
-      </div>
+      <div class="progress-bar-container"><div class="progress-bar" id="progressBar"></div></div>
+      <div class="percent-container">已消耗资产: <span id="percentText">0.000000</span>%</div>
     </div>
 
     <div id="productContainer"></div>
   </div>
   
-  <button class="receipt-btn" id="receiptBtn">查看账单</button>
+  <button class="checkout-btn" id="checkoutBtn" onclick="openModal()" style="display: none;">
+    去结算 <span class="checkout-badge" id="checkoutBadge">0</span>
+  </button>
+
+  <!-- 结账弹窗 -->
+  <div class="modal-overlay" id="checkoutModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>确认订单信息</h2>
+        <button class="close-btn" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div id="orderSummary" class="order-summary"></div>
+        <form id="checkoutForm" onsubmit="submitOrder(event)">
+          <div class="form-group">
+            <label>收货人姓名</label>
+            <input type="text" id="shipName" placeholder="例如：埃隆·马斯克" required />
+          </div>
+          <div class="form-group">
+            <label>联系电话</label>
+            <input type="tel" id="shipPhone" placeholder="例如：13800000000" required />
+          </div>
+          <div class="form-group">
+            <label>配送地址 (支持星际快递)</label>
+            <textarea id="shipAddress" rows="2" placeholder="例如：火星奥林帕斯山1号 / 德州星舰基地" required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">确认支付 $ <span id="modalTotalBtn">0</span></button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 成功提示框 -->
+  <div class="toast" id="toastMessage">✅ 订单支付成功！商品正通过星舰火速派送中 🚀</div>
 
   <script>
     const MUSK_TOTAL = 310000000000;
+    let permanentlySpent = 0; // 记录已成功结算的总金额，让游戏可以持续玩下去
     let currentMoney = MUSK_TOTAL;
     let targetMoney = MUSK_TOTAL;
     
-    // 扩充并分类的顶级商品库
     const productCategories = [
       {
-        category: "日常与科技盲盒 (Daily & Tech)",
+        category: "日常与科技盲盒",
         items: [
           { id: 1, name: '一杯星巴克咖啡', price: 5, count: 0 },
           { id: 2, name: 'Apple Vision Pro', price: 3499, count: 0 },
@@ -284,7 +241,7 @@
         ]
       },
       {
-        category: "奢侈品与生活方式 (Luxury & Lifestyle)",
+        category: "奢侈品与生活方式",
         items: [
           { id: 6, name: '劳力士保罗纽曼迪通拿', price: 17000000, count: 0 },
           { id: 7, name: '洛杉矶比佛利山庄豪宅', price: 85000000, count: 0 },
@@ -294,7 +251,7 @@
         ]
       },
       {
-        category: "巨头收购与权力 (Acquisition & Power)",
+        category: "巨头收购与权力",
         items: [
           { id: 11, name: '收购曼联足球俱乐部', price: 4500000000, count: 0 },
           { id: 12, name: '建造五角大楼 (同等规模)', price: 5000000000, count: 0 },
@@ -304,38 +261,29 @@
         ]
       },
       {
-        category: "人类未来与星辰大海 (Future & Space)",
+        category: "人类未来与星辰大海",
         items: [
           { id: 16, name: 'SpaceX 星舰单次发射', price: 90000000, count: 0 },
           { id: 17, name: '国际空间站 (ISS) 终身套房', price: 2000000000, count: 0 },
           { id: 18, name: '建造世界最高楼 (哈利法塔级别)', price: 1500000000, count: 0 },
-          { id: 19, name: '解决全球饥饿问题 (联合国估算)', price: 6000000000, count: 0 },
+          { id: 19, name: '解决全球饥饿问题 (估算)', price: 6000000000, count: 0 },
           { id: 20, name: '火星首座独立生态圈微型城市', price: 120000000000, count: 0 }
         ]
       }
     ];
 
-    const moneyCountEl = document.getElementById('moneyCount');
-    const percentTextEl = document.getElementById('percentText');
-    const progressBarEl = document.getElementById('progressBar');
-    const productContainerEl = document.getElementById('productContainer');
-    const receiptBtnEl = document.getElementById('receiptBtn');
-
-    // 扁平化商品列表以便查询
     const allProducts = productCategories.flatMap(cat => cat.items);
 
-    // 渲染商品分类和列表
     function render() {
-      productContainerEl.innerHTML = '';
+      const container = document.getElementById('productContainer');
+      container.innerHTML = '';
       
       productCategories.forEach(category => {
-        // 分类标题
         const catTitle = document.createElement('div');
         catTitle.className = 'category-title';
         catTitle.innerText = category.category;
-        productContainerEl.appendChild(catTitle);
+        container.appendChild(catTitle);
         
-        // 商品网格
         const grid = document.createElement('div');
         grid.className = 'product-grid';
         
@@ -348,78 +296,109 @@
               <div class="product-price">$ ${item.price.toLocaleString('en-US')}</div>
             </div>
             <div class="control-box">
-              <button class="btn" onclick="changeCount(${item.id}, 'sub')" ${item.count <= 0 ? 'disabled' : ''}>−</button>
+              <button type="button" class="btn" onclick="changeCount(${item.id}, 'sub')" ${item.count <= 0 ? 'disabled' : ''}>−</button>
               <span class="count-num">${item.count}</span>
-              <button class="btn" onclick="changeCount(${item.id}, 'add')">+</button>
+              <button type="button" class="btn" onclick="changeCount(${item.id}, 'add')">+</button>
             </div>
           `;
           grid.appendChild(card);
         });
-        
-        productContainerEl.appendChild(grid);
+        container.appendChild(grid);
       });
     }
 
-    // 处理加减
     window.changeCount = function(id, type) {
       let product = allProducts.find(p => p.id === id);
-      
       if (type === 'add') {
-        // 检查钱够不够
-        if (targetMoney >= product.price) {
-          product.count++;
-        }
+        if (targetMoney >= product.price) product.count++;
       } else if (type === 'sub' && product.count > 0) {
         product.count--;
       }
-      
       updateCalculations();
       render(); 
     }
 
-    // 计算逻辑
     function updateCalculations() {
-      let totalSpent = allProducts.reduce((sum, p) => sum + (p.price * p.count), 0);
+      let cartTotal = allProducts.reduce((sum, p) => sum + (p.price * p.count), 0);
+      let totalSpent = permanentlySpent + cartTotal;
       targetMoney = Math.max(0, MUSK_TOTAL - totalSpent);
       
       let spentPercent = ((totalSpent / MUSK_TOTAL) * 100);
-      percentTextEl.innerText = spentPercent.toFixed(6);
-      progressBarEl.style.width = spentPercent + '%';
+      document.getElementById('percentText').innerText = spentPercent.toFixed(6);
+      document.getElementById('progressBar').style.width = spentPercent + '%';
       
-      // 显示/隐藏账单按钮
-      if (totalSpent > 0) {
-        receiptBtnEl.style.display = 'block';
+      const btn = document.getElementById('checkoutBtn');
+      const badge = document.getElementById('checkoutBadge');
+      
+      let totalItems = allProducts.reduce((sum, p) => sum + p.count, 0);
+      
+      if (cartTotal > 0) {
+        btn.style.display = 'flex';
+        badge.innerText = totalItems;
       } else {
-        receiptBtnEl.style.display = 'none';
+        btn.style.display = 'none';
       }
     }
 
-    // 丝滑数字滚动动画
     function animateMoney() {
       if (Math.abs(currentMoney - targetMoney) > 0.5) {
         currentMoney += (targetMoney - currentMoney) * 0.12;
         if (Math.abs(currentMoney - targetMoney) < 1) currentMoney = targetMoney;
-        
-        moneyCountEl.innerText = `$ ${Math.floor(currentMoney).toLocaleString('en-US')}`;
+        document.getElementById('moneyCount').innerText = `$ ${Math.floor(currentMoney).toLocaleString('en-US')}`;
       }
       requestAnimationFrame(animateMoney);
     }
-    
-    // 账单按钮事件
-    receiptBtnEl.addEventListener('click', () => {
-      let receiptText = "【您的消费账单】\n\n";
-      let total = 0;
+
+    /* 结账与订单逻辑 */
+    function openModal() {
+      const summaryContainer = document.getElementById('orderSummary');
+      let html = '';
+      let cartTotal = 0;
       allProducts.forEach(p => {
         if (p.count > 0) {
-          receiptText += `${p.name} x ${p.count}\n`;
-          total += p.price * p.count;
+          let itemTotal = p.price * p.count;
+          cartTotal += itemTotal;
+          html += `<div class="order-item"><span>${p.name} x ${p.count}</span><span>$ ${itemTotal.toLocaleString('en-US')}</span></div>`;
         }
       });
-      receiptText += `\n总计: $ ${total.toLocaleString('en-US')}`;
-      alert(receiptText);
-    });
+      html += `<div class="order-item"><span>合计总计</span><span>$ ${cartTotal.toLocaleString('en-US')}</span></div>`;
+      
+      summaryContainer.innerHTML = html;
+      document.getElementById('modalTotalBtn').innerText = cartTotal.toLocaleString('en-US');
+      document.getElementById('checkoutModal').classList.add('active');
+      document.body.style.overflow = 'hidden'; // 防止背景滚动
+    }
 
-    // 初始化
+    function closeModal() {
+      document.getElementById('checkoutModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function submitOrder(e) {
+      e.preventDefault(); // 阻止表单默认提交刷新页面
+      
+      // 计算本次购物车总计并累加到永久消耗中
+      let cartTotal = allProducts.reduce((sum, p) => sum + (p.price * p.count), 0);
+      permanentlySpent += cartTotal;
+      
+      // 清空购物车
+      allProducts.forEach(p => p.count = 0);
+      
+      closeModal();
+      updateCalculations();
+      render();
+      
+      // 显示成功 Toast 提示
+      const toast = document.getElementById('toastMessage');
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3500);
+      
+      // 清空表单数据
+      document.getElementById('checkoutForm').reset();
+    }
+
     render();
     animateMoney();
   </script>
